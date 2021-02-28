@@ -34,17 +34,26 @@ const useStyles = makeStyles((theme) => ({
   moreSpaceBelow: {
     marginBottom: theme.spacing(4),
   },
+  resetBtn: {
+    float: 'right',
+  },
 }));
+
+const DEFAULT_U = true;
+const DEFAULT_FULL = 0;
+const DEFAULT_HALF = 0;
+const DEFAULT_RU_SYSTEM = 0;
+const DEFAULT_KEYS = '';
 
 const App = () => {
   const classes = useStyles();
-  const [full, setFull] = useState(0);
-  const [half, setHalf] = useState(0);
-  const [u, setU] = useState(true);
-  const [keys, setKeys] = useState('');
+  const [full, setFull] = useState(DEFAULT_FULL);
+  const [half, setHalf] = useState(DEFAULT_HALF);
+  const [u, setU] = useState(DEFAULT_U);
+  const [keys, setKeys] = useState(DEFAULT_KEYS);
   const [table, setTable] = useState('');
   const [loading, setLoading] = useState(false);
-  const [ruSystem, setRUSystem] = useState(0);
+  const [ruSystem, setRUSystem] = useState(DEFAULT_RU_SYSTEM);
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
@@ -83,9 +92,18 @@ const App = () => {
     setRUSystem(0);
   };
 
-  const handleCalculate = () => {
+  const handleCalculate = (e) => {
+    e.preventDefault();
     setLoading(true);
     garanti.postMessage([full, half, u, keys]);
+  };
+
+  const handleResetForm = () => {
+    setKeys(DEFAULT_KEYS);
+    setFull(DEFAULT_FULL);
+    setHalf(DEFAULT_HALF);
+    setRUSystem(DEFAULT_RU_SYSTEM);
+    setU(DEFAULT_U);
   };
 
   const handleChangeRUSystem = (event) => {
@@ -131,6 +149,12 @@ const App = () => {
   };
 
   const disableSubmit = keys.trim().length === 0;
+  const disableReset =
+    half === DEFAULT_HALF &&
+    full === DEFAULT_FULL &&
+    keys === DEFAULT_KEYS &&
+    ruSystem === DEFAULT_RU_SYSTEM &&
+    u === DEFAULT_U;
 
   return (
     <>
@@ -160,94 +184,108 @@ const App = () => {
               nyckelrader och tryck sen på "Beräkna garanti" så börjar
               programmet räkna ut garantin.
             </Typography>
-            <TextField
-              className={classes.spaceBelow}
-              label="Helgarderingar"
-              select
-              fullWidth
-              SelectProps={{
-                native: true,
-              }}
-              value={full}
-              onChange={handleChangeFull}
-            >
-              {hedges.map((value) => (
-                <option key={value} value={value}>
-                  {value === 0
-                    ? 'Inga'
-                    : value + ' helgardering' + (value > 1 ? 'ar' : '')}
-                </option>
-              ))}
-            </TextField>
-            <TextField
-              className={classes.spaceBelow}
-              select
-              label="Halvgarderingar"
-              fullWidth
-              SelectProps={{
-                native: true,
-              }}
-              value={half}
-              onChange={handleChangeHalf}
-            >
-              {hedges.map((value) => (
-                <option key={value} value={value}>
-                  {value === 0
-                    ? 'Inga'
-                    : value + ' halvgardering' + (value > 1 ? 'ar' : '')}
-                </option>
-              ))}
-            </TextField>
-            <FormControlLabel
-              className={classes.spaceBelow}
-              control={
-                <Checkbox
-                  checked={u}
-                  onChange={handleChangeU}
-                  name="checkedB"
-                  color="primary"
-                />
-              }
-              label="U-system"
-            />
-            <TextField
-              className={classes.spaceBelow}
-              multiline
-              label="Nyckelrader"
-              rows={5}
-              rowsMax={12}
-              fullWidth
-              onChange={handleChangeKeys}
-              value={keys}
-            />
+            <form onSubmit={handleCalculate} onReset={handleResetForm}>
+              <TextField
+                className={classes.spaceBelow}
+                label="Helgarderingar"
+                select
+                fullWidth
+                SelectProps={{
+                  native: true,
+                }}
+                value={full}
+                onChange={handleChangeFull}
+              >
+                {hedges.map((value) => (
+                  <option key={value} value={value}>
+                    {value === 0
+                      ? 'Inga'
+                      : value + ' helgardering' + (value > 1 ? 'ar' : '')}
+                  </option>
+                ))}
+              </TextField>
+              <TextField
+                className={classes.spaceBelow}
+                select
+                label="Halvgarderingar"
+                fullWidth
+                SelectProps={{
+                  native: true,
+                }}
+                value={half}
+                onChange={handleChangeHalf}
+              >
+                {hedges.map((value) => (
+                  <option key={value} value={value}>
+                    {value === 0
+                      ? 'Inga'
+                      : value + ' halvgardering' + (value > 1 ? 'ar' : '')}
+                  </option>
+                ))}
+              </TextField>
+              <FormControlLabel
+                className={classes.spaceBelow}
+                control={
+                  <Checkbox
+                    checked={u}
+                    onChange={handleChangeU}
+                    name="checkedB"
+                    color="primary"
+                  />
+                }
+                label="U-system"
+              />
+              <TextField
+                className={classes.spaceBelow}
+                multiline
+                label="Nyckelrader"
+                rows={5}
+                rowsMax={12}
+                fullWidth
+                onChange={handleChangeKeys}
+                value={keys}
+              />
 
-            <TextField
-              className={classes.spaceBelow}
-              select
-              label="R- och U-system från Svenska Spel"
-              SelectProps={{
-                native: true,
-              }}
-              fullWidth
-              value={ruSystem}
-              onChange={handleChangeRUSystem}
-            >
-              <option value={0}>Ej valt</option>
-              {Object.keys(systems).map((value) => (
-                <option key={value} value={value}>
-                  {value}
-                </option>
-              ))}
-            </TextField>
-            <Button
-              disabled={disableSubmit}
-              variant="contained"
-              color="primary"
-              onClick={handleCalculate}
-              size="large"
-            >
-              Beräkna garanti
-            </Button>
+              <TextField
+                className={classes.spaceBelow}
+                select
+                label="R- och U-system från Svenska Spel"
+                SelectProps={{
+                  native: true,
+                }}
+                fullWidth
+                value={ruSystem}
+                onChange={handleChangeRUSystem}
+              >
+                <option value={0}>Ej valt</option>
+                {Object.keys(systems).map((value) => (
+                  <option key={value} value={value}>
+                    {value}
+                  </option>
+                ))}
+              </TextField>
+              <Box>
+                <Button
+                  disabled={disableSubmit}
+                  variant="contained"
+                  color="primary"
+                  size="large"
+                  type="submit"
+                >
+                  Beräkna garanti
+                </Button>
+                <Button
+                  variant="contained"
+                  color="default"
+                  type="reset"
+                  size="small"
+                  disabled={disableReset}
+                  className={classes.resetBtn}
+                >
+                  Rensa
+                </Button>
+              </Box>
+            </form>
           </Box>
         </Grid>
         <Grid item xs={12} md={7} lg={8} xl={9}>

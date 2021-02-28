@@ -149,6 +149,31 @@ const getGuaranteeTable = ({ fullHedges, halfHedges, system, uSystem }) => {
     r.correctedCorrects = correctedCorrects;
   });
 
+  const canCollapse = (a, b, fromCorrectedCorrectsIndex) => {
+    let current = fromCorrectedCorrectsIndex;
+    while (true) {
+      if (current === 14) {
+        const aU = a.uCorrects;
+        const bU = b.uCorrects;
+        if (aU !== bU) {
+          return false;
+        } else {
+          break;
+        }
+      }
+
+      const aC = a.correctedCorrects[current];
+      const bC = b.correctedCorrects[current];
+      if (aC !== bC) {
+        return false;
+      }
+
+      current += 1;
+    }
+
+    return true;
+  };
+
   // handle grouping
   let groupCandidate = null;
   sorted.forEach((outcome, index) => {
@@ -168,7 +193,9 @@ const getGuaranteeTable = ({ fullHedges, halfHedges, system, uSystem }) => {
         let cIndex = 13 - i;
         const corrects = outcome.correctedCorrects[cIndex];
         const diff = prev.correctedCorrects[cIndex] - corrects;
-        if (diff === 1) {
+        const collapseFromIndex = cIndex + 1;
+        const collapse = canCollapse(prev, outcome, collapseFromIndex);
+        if (diff === 1 && collapse) {
           group = true;
           outcome.toDelete = true;
           if (!Array.isArray(groupCandidate.correctedCorrects[cIndex])) {
@@ -177,10 +204,11 @@ const getGuaranteeTable = ({ fullHedges, halfHedges, system, uSystem }) => {
               null,
             ];
           }
+          groupCandidate.occurrences += outcome.occurrences;
           groupCandidate.correctedCorrects[cIndex][1] =
             outcome.correctedCorrects[cIndex];
         } else {
-          groupCandidate = null;
+          groupCandidate = outcome;
           return;
         }
       }
@@ -189,6 +217,7 @@ const getGuaranteeTable = ({ fullHedges, halfHedges, system, uSystem }) => {
     }
   });
 
+  console.log(sorted);
   sorted = sorted.filter((outcome) => {
     return !outcome.toDelete;
   });
@@ -251,6 +280,12 @@ const getGuaranteeTable = ({ fullHedges, halfHedges, system, uSystem }) => {
     if (uSystem && prevUGroup !== r.uCorrects && prevUGroup !== null) {
       tableRows.push(divider);
       horizontalBorderIndicies.push(i + 2);
+
+      const dividerColumns = ['', '', '', '', ''];
+      if (uSystem) {
+        dividerColumns.push('');
+      }
+      data.push(dividerColumns);
     }
 
     tableRows.push(printRow.join(' '));
@@ -276,7 +311,8 @@ const getGuaranteeTable = ({ fullHedges, halfHedges, system, uSystem }) => {
       },
     },
     drawHorizontalLine: (index, size) => {
-      return horizontalBorderIndicies.includes(index);
+      return index === 2;
+      // return horizontalBorderIndicies.includes(index);
     },
   });
   return tableRows.join('\n');
