@@ -215,7 +215,7 @@ const App = () => {
               multiline
               label="Nyckelrader"
               rows={5}
-              rowsMax={20}
+              rowsMax={12}
               fullWidth
               onChange={handleChangeKeys}
               value={keys}
@@ -255,21 +255,23 @@ const App = () => {
             {loading ? (
               <LinearProgress />
             ) : (
-              <>
-                <Button
-                  variant="contained"
-                  color="default"
-                  className={classes.button}
-                  onClick={handleCopy}
-                  disabled={copied}
-                  startIcon={<FileCopyIcon />}
-                >
-                  Kopiera
-                </Button>
-                <Box fontSize={16}>
-                  <pre>{table}</pre>
-                </Box>
-              </>
+              table && (
+                <>
+                  <Button
+                    variant="contained"
+                    color="default"
+                    className={classes.button}
+                    onClick={handleCopy}
+                    disabled={copied}
+                    startIcon={<FileCopyIcon />}
+                  >
+                    Kopiera
+                  </Button>
+                  <Box fontSize={16}>
+                    <pre>{table}</pre>
+                  </Box>
+                </>
+              )
             )}
           </Box>
         </Grid>
