@@ -37,6 +37,9 @@ const useStyles = makeStyles((theme) => ({
   resetBtn: {
     float: 'right',
   },
+  copyKeysBtn: {
+    float: 'right',
+  },
 }));
 
 const DEFAULT_U = true;
@@ -144,6 +147,21 @@ const App = () => {
     });
   };
 
+  const handleCopyKeys = () => {
+    navigator.permissions.query({ name: 'clipboard-write' }).then((result) => {
+      if (result.state == 'granted' || result.state == 'prompt') {
+        navigator.clipboard.writeText(keys).then(
+          () => {
+            setCopied(true);
+          },
+          () => {
+            alert('Kopieringen misslyckades');
+          },
+        );
+      }
+    });
+  };
+
   const handleCloseCopySnackbar = () => {
     setCopied(false);
   };
@@ -165,7 +183,7 @@ const App = () => {
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
       >
         <Alert onClose={handleCloseCopySnackbar} severity="success">
-          Kopierat och klart!
+          Kopierat!
         </Alert>
       </Snackbar>
       <Grid container>
@@ -223,18 +241,34 @@ const App = () => {
                   </option>
                 ))}
               </TextField>
-              <FormControlLabel
-                className={classes.spaceBelow}
-                control={
-                  <Checkbox
-                    checked={u}
-                    onChange={handleChangeU}
-                    name="checkedB"
-                    color="primary"
-                  />
-                }
-                label="U-system"
-              />
+              <Box display="flex" className={classes.spaceBelow}>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={u}
+                      onChange={handleChangeU}
+                      name="checkedB"
+                      color="primary"
+                    />
+                  }
+                  label="U-system"
+                />
+                {keys && (
+                  <Box alignSelf="flex-end" flexGrow="1">
+                    <Button
+                      variant="contained"
+                      color="default"
+                      size="small"
+                      className={classes.copyKeysBtn}
+                      onClick={handleCopyKeys}
+                      disabled={copied}
+                      startIcon={<FileCopyIcon />}
+                    >
+                      Kopiera
+                    </Button>
+                  </Box>
+                )}
+              </Box>
               <TextField
                 className={classes.spaceBelow}
                 multiline
@@ -245,11 +279,10 @@ const App = () => {
                 onChange={handleChangeKeys}
                 value={keys}
               />
-
               <TextField
                 className={classes.spaceBelow}
                 select
-                label="R- och U-system från Svenska Spel"
+                label="Fördefinerade R- och U-system"
                 SelectProps={{
                   native: true,
                 }}
