@@ -98,7 +98,7 @@ const App = () => {
   const handleCalculate = (e) => {
     e.preventDefault();
     setLoading(true);
-    garanti.postMessage([full, half, u, keys]);
+    garanti.postMessage([Number(full), Number(half), u, keys]);
   };
 
   const handleResetForm = () => {
