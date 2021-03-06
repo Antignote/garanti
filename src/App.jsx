@@ -15,7 +15,7 @@ import {
   Snackbar,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import garanti from './worker.js';
+import { garantiWorker, tableWorker } from './worker.js';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 import { systems } from './systems.js';
 import { ZERO_TO_ONE_INDEX } from './utils.js';
@@ -45,19 +45,53 @@ const useStyles = makeStyles((theme) => ({
 const DEFAULT_U = true;
 const DEFAULT_FULL = 0;
 const DEFAULT_HALF = 0;
+const DEFAULT_E_FULL = 0;
+const DEFAULT_E_HALF = 0;
+const DEFAULT_M_FULL = 0;
+const DEFAULT_M_HALF = 0;
 const DEFAULT_RU_SYSTEM = 0;
 const DEFAULT_KEYS = '';
+const DEFAULT_TABLE_MIN_GROUP = 10;
+const DEFAULT_TABLE_MIN_U = 0;
+const DEFAULT_TABLE_COLLAPSE_LAST = true;
 
 const App = () => {
   const classes = useStyles();
   const [full, setFull] = useState(DEFAULT_FULL);
   const [half, setHalf] = useState(DEFAULT_HALF);
+  const [eFull, setEFull] = useState(DEFAULT_E_FULL);
+  const [eHalf, setEHalf] = useState(DEFAULT_E_HALF);
+  const [mFull, setMFull] = useState(DEFAULT_M_FULL);
+  const [mHalf, setMHalf] = useState(DEFAULT_M_HALF);
   const [u, setU] = useState(DEFAULT_U);
   const [keys, setKeys] = useState(DEFAULT_KEYS);
+  const [rows, setRows] = useState(null);
   const [table, setTable] = useState('');
   const [loading, setLoading] = useState(false);
   const [ruSystem, setRUSystem] = useState(DEFAULT_RU_SYSTEM);
   const [copied, setCopied] = useState(false);
+
+  const [tableMinGroup, setTableMinGroup] = useState(DEFAULT_TABLE_MIN_GROUP);
+  const [tableMinU, setTableMinU] = useState(DEFAULT_TABLE_MIN_U);
+  const [tableCollapseLast, setTableCollapseLast] = useState(
+    DEFAULT_TABLE_MIN_GROUP,
+  );
+
+  useEffect(() => {
+    const onMessage = (event) => {
+      if (event.data instanceof ErrorEvent) {
+        alert(event.message);
+      } else {
+        setRows(event.data);
+      }
+      setLoading(false);
+    };
+
+    garantiWorker.addEventListener('message', onMessage);
+    return () => {
+      garantiWorker.removeEventListener('message', onMessage);
+    };
+  }, []);
 
   useEffect(() => {
     const onMessage = (event) => {
@@ -69,11 +103,26 @@ const App = () => {
       setLoading(false);
     };
 
-    garanti.addEventListener('message', onMessage);
+    tableWorker.addEventListener('message', onMessage);
     return () => {
-      garanti.removeEventListener('message', onMessage);
+      tableWorker.removeEventListener('message', onMessage);
     };
   }, []);
+
+  useEffect(() => {
+    if (rows) {
+      tableWorker.postMessage([
+        tableMinGroup,
+        tableMinU,
+        tableCollapseLast,
+        rows,
+        u,
+        full,
+        half,
+        keys.trim().split('\n').length,
+      ]);
+    }
+  }, [rows, tableMinGroup, tableCollapseLast, tableMinU]);
 
   const handleChangeU = () => {
     setU((u) => !u);
@@ -98,7 +147,7 @@ const App = () => {
   const handleCalculate = (e) => {
     e.preventDefault();
     setLoading(true);
-    garanti.postMessage([Number(full), Number(half), u, keys]);
+    garantiWorker.postMessage([Number(full), Number(half), u, keys]);
   };
 
   const handleResetForm = () => {
@@ -166,6 +215,18 @@ const App = () => {
     setCopied(false);
   };
 
+  const handleChangeTableMinGroup = (event) => {
+    setTableMinGroup(Number(event.target.value));
+  };
+
+  const handleChangeTableMinU = (event) => {
+    setTableMinU(Number(event.target.value));
+  };
+
+  const handleChangeTableCollapseLast = () => {
+    setTableCollapseLast((collapsed) => !collapsed);
+  };
+
   const disableSubmit = keys.trim().length === 0;
   const disableReset =
     half === DEFAULT_HALF &&
@@ -186,8 +247,8 @@ const App = () => {
           Kopierat!
         </Alert>
       </Snackbar>
-      <Grid container>
-        <Grid item xs={12} md={5} lg={4} xl={3}>
+      <Grid container style={{ flexWrap: 'nowrap' }}>
+        <Grid item xs={12} md={5} lg={4} xl={3} style={{ flexShrink: 0 }}>
           <Box px={2} pt={3}>
             <Typography variant="h4" component="h1" gutterBottom>
               Garantiräknaren
@@ -321,7 +382,62 @@ const App = () => {
             </form>
           </Box>
         </Grid>
-        <Grid item xs={12} md={7} lg={8} xl={9}>
+        <Grid item xs={12} md={7} lg={8} xl={9} style={{ overflow: 'hidden' }}>
+          <Box px={2} pt={3}>
+            <>
+              <Typography variant="h6" component="h2" gutterBottom>
+                Tabellinställningar
+              </Typography>
+              <Grid container>
+                <Grid item>
+                  <TextField
+                    className={classes.spaceBelow}
+                    label="Ner till vinstgrupp"
+                    select
+                    fullWidth
+                    SelectProps={{
+                      native: true,
+                    }}
+                    value={tableMinGroup}
+                    onChange={handleChangeTableMinGroup}
+                  >
+                    {[...Array(14).keys()].map((value) => (
+                      <option key={value} value={value}>
+                        {value}
+                      </option>
+                    ))}
+                  </TextField>
+                  <TextField
+                    className={classes.spaceBelow}
+                    label="Minsta U-tecken"
+                    select
+                    fullWidth
+                    SelectProps={{
+                      native: true,
+                    }}
+                    value={tableMinU}
+                    onChange={handleChangeTableMinU}
+                  >
+                    {[...Array(14).keys()].map((value) => (
+                      <option key={value} value={value}>
+                        {value}
+                      </option>
+                    ))}
+                  </TextField>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={tableCollapseLast}
+                        onChange={handleChangeTableCollapseLast}
+                        color="primary"
+                      />
+                    }
+                    label="Gruppera lägsta vinstgruppen"
+                  />
+                </Grid>
+              </Grid>
+            </>
+          </Box>
           <Box px={2} pt={3}>
             {loading ? (
               <LinearProgress />
@@ -338,7 +454,7 @@ const App = () => {
                   >
                     Kopiera
                   </Button>
-                  <Box fontSize={16}>
+                  <Box fontSize={16} style={{ overflowX: 'auto' }}>
                     <pre>{table}</pre>
                   </Box>
                 </>
