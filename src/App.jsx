@@ -247,7 +247,7 @@ const App = () => {
           Kopierat!
         </Alert>
       </Snackbar>
-      <Grid container style={{ flexWrap: 'nowrap' }}>
+      <Grid container>
         <Grid item xs={12} md={5} lg={4} xl={3} style={{ flexShrink: 0 }}>
           <Box px={2} pt={3}>
             <Typography variant="h4" component="h1" gutterBottom>
