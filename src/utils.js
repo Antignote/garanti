@@ -1,191 +1,193 @@
-const getMathRows = function (row, currentMark, marks) {
-  if (marks.length === currentMark) {
-    return [];
-  }
-
-  const combinedRows = [];
-  for (const mark of marks[currentMark].marks) {
-    row[marks[currentMark].position] = mark;
-
-    if (currentMark === marks.length - 1) {
-      combinedRows.push(row.slice(0));
-    }
-
-    combinedRows.push(...getMathRows(row, currentMark + 1, marks));
-  }
-
-  return combinedRows;
+const NUM_TO_HEDGE_SIGNS = {
+	7: [1, 2, 3],
+	6: [2, 3],
+	5: [1, 3],
+	4: [1, 2],
 };
 
-const OUTCOMES = ['1', 'X', '2'];
-const HALF_HEDGE_OUTCOMES = {
-  '1X': ['1', 'X'],
-  12: ['1', '2'],
-  X2: ['X', '2'],
+const NUM_TO_1X2 = {
+	1: '1',
+	2: 'X',
+	3: '2',
+	4: '1X',
+	5: '12',
+	6: 'X2',
+	7: '1X2',
 };
+
+const getMathRows = (row, currentMark, marks) => {
+	if (marks.length === currentMark) {
+		return [];
+	}
+
+	const combinedRows = [];
+	for (const mark of NUM_TO_HEDGE_SIGNS[marks[currentMark].marks]) {
+		row[marks[currentMark].position] = mark;
+
+		if (currentMark === marks.length - 1) {
+			combinedRows.push(row.slice(0));
+		}
+
+		combinedRows.push(...getMathRows(row, currentMark + 1, marks));
+	}
+
+	return combinedRows;
+};
+
+export const splitToRows = (row) => {
+	const marks = [];
+	let rows = [];
+
+	for (let i = 0; i < row.length; ++i) {
+		if (row[i] > 3) {
+			marks.push({
+				position: i,
+				marks: row[i],
+			});
+		}
+	}
+
+	if (marks.length) {
+		rows = getMathRows(row.slice(0), 0, marks);
+	} else {
+		rows = [row];
+	}
+
+	return rows;
+};
+
 const U_OUTCOMES = {
-  1: ['1', 'X', '2'],
-  X: ['X', '1', '2'],
-  2: ['2', '1', 'X'],
+	1: { 1: 1, 2: 2, 3: 3 },
+	2: { 1: 2, 2: 1, 3: 3 },
+	3: { 1: 3, 2: 1, 3: 2 },
 };
 const HALF_HEDGE_U_OUTCOMES = {
-  1: {
-    '1X': ['1', 'X'],
-    12: ['1', '2'],
-  },
-  X: {
-    '1X': ['X', '1'],
-    X2: ['X', '2'],
-  },
-  2: {
-    12: ['2', '1'],
-    X2: ['2', 'X'],
-  },
+	1: {
+		4: { 1: 1, 2: 2 },
+		5: { 1: 1, 3: 3 },
+	},
+	2: {
+		4: { 1: 2, 2: 1 },
+		6: { 1: 2, 2: 3 },
+	},
+	3: {
+		5: { 1: 3, 2: 1 },
+		6: { 1: 3, 2: 2 },
+	},
 };
 
-const getExpandedRowsFromSingleRow = (system, row, uRows) => {
-  const fullHedgesIndices = [];
-  const halfHedgesIndices = [];
-  const singlesIndices = [];
-  const expandedRows = [];
-  const rowLength = row.length;
-  const isUSystem = Boolean(uRows);
+export const getExpandedRowsFromSingleRow = (system, row, uRows) => {
+	const fullIndices = [];
+	const halfIndices = [];
+	const singlesIndices = [];
+	const isUSystem = Boolean(uRows);
 
-  let currentFullIndex = null;
-  let currentHalfIndex = null;
+	for (let i = 0; i < row.length; ++i) {
+		if (row[i] <= 3) {
+			singlesIndices.push(i);
+		} else if (row[i] <= 6) {
+			halfIndices.push(i);
+		} else {
+			fullIndices.push(i);
+		}
+	}
 
-  for (let i = 0; i < rowLength; ++i) {
-    if (row[i].length === 3) {
-      fullHedgesIndices.push(i);
-    } else if (row[i].length === 1) {
-      singlesIndices.push(i);
-    } else {
-      halfHedgesIndices.push(i);
-    }
-  }
+	const expandedRows = [];
+	for (const key of system) {
+		const eRow = [];
 
-  const fullHedgesIndicesLength = fullHedgesIndices.length;
-  const halfHedgesIndicesLength = halfHedgesIndices.length;
+		let currentFullIndex = -1;
+		for (const fullIndex of fullIndices) {
+			const keyIndex = ++currentFullIndex;
+			if (isUSystem) {
+				const uSign = uRows[fullIndex];
+				eRow.push(U_OUTCOMES[uSign][key[keyIndex]]);
+			} else {
+				eRow.push(key[keyIndex]);
+			}
+		}
 
-  for (let i = 0; i < system.length; ++i) {
-    currentFullIndex = -1;
-    currentHalfIndex = fullHedgesIndicesLength - 1;
-    expandedRows.push([]);
+		let currentHalfIndex = fullIndices.length - 1;
+		for (const halfIndex of halfIndices) {
+			const keyIndex = ++currentHalfIndex;
+			if (isUSystem) {
+				const uSign = uRows[halfIndex];
+				eRow.push(HALF_HEDGE_U_OUTCOMES[uSign][row[halfIndex]][key[keyIndex]]);
+			} else {
+				eRow.push(key[keyIndex]);
+			}
+		}
 
-    for (let k = 0; k < fullHedgesIndicesLength; ++k) {
-      if (isUSystem) {
-        expandedRows[expandedRows.length - 1][fullHedgesIndices[k]] =
-          U_OUTCOMES[uRows[fullHedgesIndices[k]]][
-            system[i][++currentFullIndex]
-          ];
-      } else {
-        expandedRows[expandedRows.length - 1][fullHedgesIndices[k]] =
-          OUTCOMES[system[i][++currentFullIndex]];
-      }
-    }
+		for (const singleIndex of singlesIndices) {
+			eRow[singleIndex] = NUM_TO_1X2[row[singleIndex]];
+		}
+		expandedRows.push(eRow);
+	}
 
-    for (let k = 0; k < halfHedgesIndicesLength; ++k) {
-      if (isUSystem) {
-        expandedRows[expandedRows.length - 1][halfHedgesIndices[k]] =
-          HALF_HEDGE_U_OUTCOMES[uRows[halfHedgesIndices[k]]][
-            row[halfHedgesIndices[k]]
-          ][system[i][++currentHalfIndex]];
-      } else {
-        expandedRows[expandedRows.length - 1][halfHedgesIndices[k]] =
-          HALF_HEDGE_OUTCOMES[row[halfHedgesIndices[k]]][
-            system[i][++currentHalfIndex]
-          ];
-      }
-    }
-
-    for (let k = 0; k < singlesIndices.length; ++k) {
-      expandedRows[expandedRows.length - 1][singlesIndices[k]] =
-        row[singlesIndices[k]];
-    }
-  }
-
-  return expandedRows;
-};
-
-export const splitToRows = function (row) {
-  const marks = [];
-  let rows = [];
-
-  for (let i = 0; i < row.length; ++i) {
-    if (row[i].length > 1) {
-      marks.push({
-        position: i,
-        marks: row[i],
-      });
-    }
-  }
-
-  if (marks.length) {
-    rows = getMathRows(row.slice(0), 0, marks);
-  } else {
-    rows = row;
-  }
-
-  return rows;
+	return expandedRows;
 };
 
 export const getExpandedRows = (system, row, uRows) => {
-  const marks = [];
-  const currentRow = row;
-  let rowsToProcess = [];
-  const processedRows = [];
+	const marks = [];
+	const currentRow = row;
+	let rowsToProcess = [];
+	const processedRows = [];
 
-  for (let i = 0; i < currentRow.length; i++) {
-    if (currentRow[i].indexOf('M') !== -1) {
-      marks.push({
-        position: i,
-        marks: currentRow[i].substr(0, currentRow[i].length - 1),
-      });
-    }
-  }
+	for (let i = 0; i < currentRow.length; i++) {
+		if (currentRow[i] > 3) {
+			marks.push({
+				position: i,
+				marks: currentRow[i],
+			});
+		}
+	}
 
-  if (marks.length) {
-    rowsToProcess = getMathRows(currentRow, 0, marks);
-  } else {
-    rowsToProcess.push(currentRow);
-  }
+	if (marks.length) {
+		rowsToProcess = getMathRows(currentRow, 0, marks);
+	} else {
+		rowsToProcess.push(currentRow);
+	}
 
-  for (const row of rowsToProcess) {
-    processedRows.push(...getExpandedRowsFromSingleRow(system, row, uRows));
-  }
+	for (const row of rowsToProcess) {
+		processedRows.push(...getExpandedRowsFromSingleRow(system, row, uRows));
+	}
 
-  return processedRows;
+	return processedRows;
 };
 
 export const calculateCorrectsForRowInSystem = (row, systemRows) => {
-  const corrects = {};
+	const corrects = {};
 
-  for (const reducedRow of systemRows) {
-    let correctForReducedRow = 0;
-    row.row.forEach((m, index) => {
-      if (reducedRow[index] === m) {
-        correctForReducedRow++;
-      }
-    });
-    corrects[correctForReducedRow] = corrects[correctForReducedRow] || 0;
-    corrects[correctForReducedRow]++;
-  }
+	for (const reducedRow of systemRows) {
+		let correctForReducedRow = 0;
+		row.row.forEach((m, index) => {
+			if (reducedRow[index] === m) {
+				correctForReducedRow++;
+			}
+		});
+		corrects[correctForReducedRow] = corrects[correctForReducedRow] || 0;
+		corrects[correctForReducedRow]++;
+	}
 
-  return corrects;
+	return corrects;
 };
 
 export const ZERO_TO_ONE_INDEX = {
-  0: '1',
-  1: '2',
-  2: '3',
+	0: '1',
+	1: '2',
+	2: '3',
+	3: '4',
+	4: '5',
+	5: '6',
+	6: '7',
 };
 
 export const ONE_TO_ZERO_INDEX = {
-  1: '0',
-  2: '1',
-  3: '2',
-  4: '3',
-  5: '4',
-  6: '5',
-  7: '6',
+	1: '0',
+	2: '1',
+	3: '2',
+	4: '3',
+	5: '4',
+	6: '5',
+	7: '6',
 };

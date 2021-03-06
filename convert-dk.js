@@ -268,13 +268,13 @@ const data = `
 
 const fixedData = data.trim();
 const form = fixedData
-  .trim()
-  .replace(/[0-9]+:/gm, '')
-  .replace(/\t+/gm, '')
-  .replace(/(^)/gm, '[')
-  .replace(/($)/gm, '],')
-  .replace(/1/gm, '0')
-  .replace(/X/gm, '1')
-  .replace(/2/gm, '2')
-  .replace(/([0-9])/gm, '$1,');
+	.trim()
+	.replace(/[0-9]+:/gm, '')
+	.replace(/\t+/gm, '')
+	.replace(/(^)/gm, '[')
+	.replace(/($)/gm, '],')
+	.replace(/1/gm, '0')
+	.replace(/X/gm, '1')
+	.replace(/2/gm, '2')
+	.replace(/([0-9])/gm, '$1,');
 writeFileSync('results', form, { encoding: 'utf-8' });
