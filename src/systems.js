@@ -21,7 +21,7 @@ export const systems = {
       [1, 1, 1, 1, 1, 1, 1],
     ],
     systemType: 'R',
-    systemNum: 33,
+    
   },
   'R0-8-16': {
     numFullHedges: 0,
@@ -162,7 +162,7 @@ export const systems = {
       [1, 0, 1, 0, 0, 1, 0, 0, 1, 1, 0],
     ],
     systemType: 'R',
-    systemNum: 34,
+    
   },
   'R0-11-44': {
     numFullHedges: 0,
@@ -1017,7 +1017,7 @@ export const systems = {
       [0, 1, 0, 1, 1, 0, 1],
     ],
     systemType: 'R',
-    systemNum: 35,
+    
   },
   'R2-7-32': {
     numFullHedges: 2,
@@ -1880,7 +1880,7 @@ export const systems = {
       [2, 2, 0, 0, 1, 0],
     ],
     systemType: 'R',
-    systemNum: 36,
+    
   },
   'R3-5-48': {
     numFullHedges: 3,
@@ -3100,7 +3100,7 @@ export const systems = {
       [2, 0, 0, 2],
     ],
     systemType: 'R',
-    systemNum: 37,
+    
   },
   'R4-4-24': {
     numFullHedges: 4,
@@ -3132,7 +3132,7 @@ export const systems = {
       [0, 0, 2, 2, 0, 0, 1, 1],
     ],
     systemType: 'R',
-    systemNum: 38,
+    
   },
   'R4-4-48': {
     numFullHedges: 4,
@@ -3339,7 +3339,7 @@ export const systems = {
       [1, 1, 1, 0, 0, 1, 0, 0],
     ],
     systemType: 'R',
-    systemNum: 39,
+    
   },
   'R4-5-48': {
     numFullHedges: 4,
@@ -3395,7 +3395,7 @@ export const systems = {
       [1, 2, 2, 0, 0, 1, 0, 0, 0],
     ],
     systemType: 'R',
-    systemNum: 40,
+    
   },
   'R4-5-72': {
     numFullHedges: 4,
@@ -3753,7 +3753,7 @@ export const systems = {
       [2, 1, 1, 0, 1, 1, 0, 0, 1, 0],
     ],
     systemType: 'R',
-    systemNum: 41,
+    
   },
   'R4-6-72': {
     numFullHedges: 4,
@@ -3833,7 +3833,7 @@ export const systems = {
       [1, 2, 1, 0, 1, 0, 1, 1, 0, 1],
     ],
     systemType: 'R',
-    systemNum: 42,
+    
   },
   'R4-6-288': {
     numFullHedges: 4,
@@ -4623,7 +4623,7 @@ export const systems = {
       [1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0],
     ],
     systemType: 'R',
-    systemNum: 43,
+    
   },
   'R4-7-144': {
     numFullHedges: 4,
@@ -4775,7 +4775,7 @@ export const systems = {
       [0, 1, 2, 2, 0, 0, 1, 0, 0, 0, 1],
     ],
     systemType: 'R',
-    systemNum: 44,
+    
   },
   'R4-8-1296': {
     numFullHedges: 4,
@@ -6104,7 +6104,7 @@ export const systems = {
       [2, 0, 1, 1, 0],
     ],
     systemType: 'R',
-    systemNum: 45,
+    
   },
   'R5-3-36': {
     numFullHedges: 5,
@@ -6148,7 +6148,7 @@ export const systems = {
       [1, 1, 2, 0, 0, 0, 0, 0],
     ],
     systemType: 'R',
-    systemNum: 46,
+    
   },
   'R5-4-72': {
     numFullHedges: 5,
@@ -6674,7 +6674,7 @@ export const systems = {
       [2, 2, 2, 2, 0, 0, 1, 1, 1, 1],
     ],
     systemType: 'R',
-    systemNum: 47,
+    
   },
   'R5-6-192': {
     numFullHedges: 5,
@@ -7074,7 +7074,7 @@ export const systems = {
       [0, 0, 2, 2, 2, 0, 0, 0, 1],
     ],
     systemType: 'R',
-    systemNum: 48,
+    
   },
   'R6-3-468': {
     numFullHedges: 6,
@@ -7601,7 +7601,7 @@ export const systems = {
       [2, 0, 2, 0, 0, 0, 0, 0, 0, 0],
     ],
     systemType: 'R',
-    systemNum: 50,
+    
   },
   'R6-4-144': {
     numFullHedges: 6,
@@ -8986,7 +8986,7 @@ export const systems = {
       [2, 1, 2, 2, 1, 1, 0, 0, 0],
     ],
     systemType: 'R',
-    systemNum: 49,
+    
   },
   'R7-0-36': {
     numFullHedges: 7,
@@ -9030,7 +9030,7 @@ export const systems = {
       [2, 2, 2, 0, 2, 2, 2],
     ],
     systemType: 'R',
-    systemNum: 28,
+    
   },
   'R7-0-186': {
     numFullHedges: 7,
@@ -9326,7 +9326,7 @@ export const systems = {
       [0, 2, 1, 1, 0, 2, 2, 1, 1],
     ],
     systemType: 'R',
-    systemNum: 51,
+    
   },
   'R7-2-108': {
     numFullHedges: 7,
@@ -9442,7 +9442,7 @@ export const systems = {
       [1, 0, 2, 0, 1, 1, 1, 0, 0],
     ],
     systemType: 'R',
-    systemNum: 52,
+    
   },
   'R7-3-216': {
     numFullHedges: 7,
@@ -10091,7 +10091,7 @@ export const systems = {
       [2, 2, 0, 1, 2, 0, 2, 2],
     ],
     systemType: 'R',
-    systemNum: 53,
+    
   },
   'R8-0-81': {
     numFullHedges: 8,
@@ -10180,7 +10180,7 @@ export const systems = {
       [2, 2, 2, 2, 1, 2, 1, 1],
     ],
     systemType: 'R',
-    systemNum: 29,
+    
   },
   'R8-0-492': {
     numFullHedges: 8,
@@ -11011,7 +11011,7 @@ export const systems = {
       [1, 2, 1, 0, 2, 0, 2, 1, 1, 0],
     ],
     systemType: 'R',
-    systemNum: 54,
+    
   },
   'R8-3-504': {
     numFullHedges: 8,
@@ -11752,7 +11752,7 @@ export const systems = {
       [2, 2, 2, 2, 2, 2, 1, 1, 1],
     ],
     systemType: 'R',
-    systemNum: 30,
+    
   },
   'R9-0-243': {
     numFullHedges: 9,
@@ -12003,7 +12003,7 @@ export const systems = {
       [0, 0, 0, 0, 2, 2, 2, 2, 2],
     ],
     systemType: 'R',
-    systemNum: 56,
+    
   },
   'R9-0-1356': {
     numFullHedges: 9,
@@ -13527,7 +13527,7 @@ export const systems = {
       [0, 1, 0, 2, 1, 0, 2, 0, 2, 1],
     ],
     systemType: 'R',
-    systemNum: 58,
+    
   },
   'R10-0-567': {
     numFullHedges: 10,
@@ -14102,7 +14102,7 @@ export const systems = {
       [2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
     ],
     systemType: 'R',
-    systemNum: 31,
+    
   },
   'R11-0-729': {
     numFullHedges: 11,
@@ -14839,7 +14839,7 @@ export const systems = {
       [2, 2, 2, 2, 2, 2, 2, 1, 1, 2, 1],
     ],
     systemType: 'R',
-    systemNum: 32,
+    
   },
   'U0-7-10': {
     numFullHedges: 0,
@@ -14857,7 +14857,7 @@ export const systems = {
       [1, 1, 1, 0, 1, 0, 0],
     ],
     systemType: 'U',
-    systemNum: 59,
+    
   },
   'U0-8-15': {
     numFullHedges: 0,
@@ -14997,7 +14997,7 @@ export const systems = {
       [0, 1, 0, 1, 1, 0, 1, 1, 0, 1],
     ],
     systemType: 'U',
-    systemNum: 60,
+    
   },
   'U0-10-67': {
     numFullHedges: 0,
@@ -15308,7 +15308,7 @@ export const systems = {
       [1, 1, 1, 1, 0, 0, 0, 1, 0, 0, 1],
     ],
     systemType: 'U',
-    systemNum: 61,
+    
   },
   'U2-8-25': {
     numFullHedges: 2,
@@ -15463,7 +15463,7 @@ export const systems = {
       [0, 1, 2, 1, 1, 0, 0, 1, 0],
     ],
     systemType: 'U',
-    systemNum: 62,
+    
   },
   'U3-6-50': {
     numFullHedges: 3,
@@ -15521,7 +15521,7 @@ export const systems = {
       [2, 2, 1, 1, 0, 0, 1, 0, 0],
     ],
     systemType: 'U',
-    systemNum: 63,
+    
   },
   'U3-7-36': {
     numFullHedges: 3,
@@ -15668,7 +15668,7 @@ export const systems = {
       [2, 2, 0, 0, 1, 0, 1, 1, 1, 0],
     ],
     systemType: 'U',
-    systemNum: 64,
+    
   },
   'U3-8-41': {
     numFullHedges: 3,
@@ -15788,7 +15788,7 @@ export const systems = {
       [0, 1, 2, 0, 1, 0, 0],
     ],
     systemType: 'U',
-    systemNum: 65,
+    
   },
   'U4-4-16': {
     numFullHedges: 4,
@@ -15812,7 +15812,7 @@ export const systems = {
       [2, 1, 0, 2, 0, 0, 1, 1],
     ],
     systemType: 'U',
-    systemNum: 66,
+    
   },
   'U4-4-22': {
     numFullHedges: 4,
@@ -15891,7 +15891,7 @@ export const systems = {
       [0, 1, 2, 0, 0, 1, 0, 1],
     ],
     systemType: 'U',
-    systemNum: 67,
+    
   },
   'U4-4-66': {
     numFullHedges: 4,
@@ -16000,7 +16000,7 @@ export const systems = {
       [2, 2, 2, 1, 0, 1, 1, 0, 0],
     ],
     systemType: 'U',
-    systemNum: 68,
+    
   },
   'U4-5-51': {
     numFullHedges: 4,
@@ -16132,7 +16132,7 @@ export const systems = {
       [1, 0, 0, 0, 1, 1, 1, 0, 1],
     ],
     systemType: 'U',
-    systemNum: 69,
+    
   },
   'U4-6-38': {
     numFullHedges: 4,
@@ -16824,7 +16824,7 @@ export const systems = {
       [2, 0, 2, 1, 0, 1, 0, 0, 1, 1, 0],
     ],
     systemType: 'U',
-    systemNum: 70,
+    
   },
   'U5-3-40': {
     numFullHedges: 5,
@@ -17047,7 +17047,7 @@ export const systems = {
       [2, 2, 2, 2, 2, 0, 0, 0, 0, 0],
     ],
     systemType: 'U',
-    systemNum: 71,
+    
   },
   'U5-5-99': {
     numFullHedges: 5,
@@ -17335,7 +17335,7 @@ export const systems = {
       [1, 1, 2, 0, 0, 1, 1, 0, 0, 1],
     ],
     systemType: 'U',
-    systemNum: 72,
+    
   },
   'U5-6-274': {
     numFullHedges: 5,
@@ -17617,7 +17617,7 @@ export const systems = {
       [2, 2, 0, 0, 1, 1, 1, 0, 1, 0, 0],
     ],
     systemType: 'U',
-    systemNum: 73,
+    
   },
   'U6-0-53': {
     numFullHedges: 6,
@@ -17884,7 +17884,7 @@ export const systems = {
       [2, 2, 1, 0, 0, 0, 0, 1, 1],
     ],
     systemType: 'U',
-    systemNum: 74,
+    
   },
   'U6-3-118': {
     numFullHedges: 6,
@@ -18132,7 +18132,7 @@ export const systems = {
       [0, 2, 0, 2, 1, 1, 0, 0, 1, 1],
     ],
     systemType: 'U',
-    systemNum: 75,
+    
   },
   'U6-4-100': {
     numFullHedges: 6,
@@ -18580,7 +18580,7 @@ export const systems = {
       [2, 2, 2, 0, 0, 0, 0, 0, 0, 1],
     ],
     systemType: 'U',
-    systemNum: 76,
+    
   },
   'U6-5-94': {
     numFullHedges: 6,
@@ -18918,7 +18918,7 @@ export const systems = {
       [1, 2, 2, 0, 1, 2, 2, 1, 0, 1],
     ],
     systemType: 'U',
-    systemNum: 77,
+    
   },
   'U7-3-163': {
     numFullHedges: 7,
@@ -19906,7 +19906,7 @@ export const systems = {
       [2, 2, 1, 0, 0, 0, 1, 1, 0, 1, 0],
     ],
     systemType: 'U',
-    systemNum: 78,
+    
   },
   'U8-0-71': {
     numFullHedges: 8,
@@ -21224,7 +21224,7 @@ export const systems = {
       [0, 0, 2, 1, 0, 2, 0, 2, 1, 0],
     ],
     systemType: 'U',
-    systemNum: 79,
+    
   },
   'U8-3-100': {
     numFullHedges: 8,
@@ -22113,7 +22113,7 @@ export const systems = {
       [2, 2, 0, 0, 0, 2, 2, 1, 1, 0, 0],
     ],
     systemType: 'U',
-    systemNum: 81,
+    
   },
   'U9-0-73': {
     numFullHedges: 9,
@@ -23529,7 +23529,7 @@ export const systems = {
       [0, 1, 0, 0, 1, 2, 0, 1, 1, 1, 0],
     ],
     systemType: 'U',
-    systemNum: 82,
+    
   },
   'U10-0-53': {
     numFullHedges: 10,
@@ -24002,7 +24002,7 @@ export const systems = {
       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     ],
     systemType: 'U',
-    systemNum: 83,
+    
   },
   'U11-0-6557': {
     numFullHedges: 11,
@@ -30679,6 +30679,6 @@ export const systems = {
       [0, 0, 0, 1, 2, 0, 0, 0, 0, 0, 0, 0, 2],
     ],
     systemType: 'U',
-    systemNum: 84,
+    
   },
 };

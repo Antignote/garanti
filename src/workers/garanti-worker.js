@@ -2,17 +2,13 @@ import {
 	calculateCorrectsForRowInSystem,
 	getExpandedRowsFromSingleRow,
 	splitToRows,
-} from './utils';
+} from '../utils';
 
-export const makeGarantiTable = ({
+export const makeGaranti = ({
 	fullHedges,
 	halfHedges,
-	system,
+	expoundedKeys,
 	uSystem,
-	// mHalf,
-	// mFull,
-	// eHalf,
-	// eFull,
 }) => {
 	const numHedges = fullHedges + halfHedges;
 	const correctsStructure = {};
@@ -38,11 +34,6 @@ export const makeGarantiTable = ({
 		uCorrects: 0,
 	}));
 
-	const expoundedKeys = [];
-	for (const compoundedKey of system) {
-		expoundedKeys.push(...splitToRows(compoundedKey));
-	}
-
 	const rows = getExpandedRowsFromSingleRow(expoundedKeys, row, uRow);
 
 	for (const possibleOutcome of possibleOutcomes) {
@@ -60,4 +51,16 @@ export const makeGarantiTable = ({
 	}
 
 	return possibleOutcomes;
+};
+
+onmessage = (e) => {
+	const { taskId, fullHedges, halfHedges, uSystem, expoundedKeys } = e.data;
+	console.log('worker: garanti (' + taskId + ')');
+	const garantiRows = makeGaranti({
+		fullHedges,
+		halfHedges,
+		expoundedKeys,
+		uSystem,
+	});
+	postMessage({ garantiRows, taskId });
 };

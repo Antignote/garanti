@@ -3,18 +3,20 @@ import { table, getBorderCharacters } from 'table';
 const MAX_CORRECTS = 13;
 
 const formatTable = ({
+	tableMinGroup,
+	tableMinU,
 	collapseLast,
-	minGroup,
-	minU,
 	rows,
 	uSystem,
 	fullHedges,
 	halfHedges,
 	systemSize,
 }) => {
-	rows = rows.filter((r) => {
-		return r.uCorrects >= minU;
-	});
+	if (uSystem) {
+		rows = rows.filter((r) => {
+			return r.uCorrects >= tableMinU;
+		});
+	}
 
 	rows.forEach((outcome) => {
 		outcome.correctsAsString =
@@ -22,7 +24,7 @@ const formatTable = ({
 			';' +
 			Object.entries(outcome.corrects)
 				.flatMap((x) => x.join(':'))
-				.slice(-(MAX_CORRECTS - minGroup + 1))
+				.slice(-(MAX_CORRECTS - tableMinGroup + 1))
 				.join(';');
 	});
 
@@ -142,7 +144,7 @@ const formatTable = ({
 			}
 			const prev = sorted?.[index - 1] ?? null;
 			if (prev) {
-				const lastIndex = MAX_CORRECTS - minGroup;
+				const lastIndex = MAX_CORRECTS - tableMinGroup;
 				for (let i = lastIndex; i > lastIndex - 1; i--) {
 					let cIndex = MAX_CORRECTS - i;
 					const corrects = outcome.correctedCorrects[cIndex];
@@ -175,7 +177,7 @@ const formatTable = ({
 		});
 	}
 
-	const length = MAX_CORRECTS - minGroup + (uSystem ? 2 : 1);
+	const length = MAX_CORRECTS - tableMinGroup + (uSystem ? 2 : 1);
 
 	const fillEmptyString = (arr) => {
 		const newArr = [...arr];
@@ -195,7 +197,7 @@ const formatTable = ({
 	if (uSystem) {
 		headerData.push('U-tips');
 	}
-	for (let i = MAX_CORRECTS; i >= minGroup; --i) {
+	for (let i = MAX_CORRECTS; i >= tableMinGroup; --i) {
 		headerData.push(i);
 	}
 	headerData.push('Chans');
@@ -210,7 +212,7 @@ const formatTable = ({
 		if (uSystem) {
 			itemData.push(r.uCorrects);
 		}
-		for (let i = MAX_CORRECTS; i >= minGroup; --i) {
+		for (let i = MAX_CORRECTS; i >= tableMinGroup; --i) {
 			if (r.correctedCorrects[i] === 0) {
 				itemData.push('-');
 			} else {
@@ -254,27 +256,29 @@ const formatTable = ({
 };
 
 onmessage = (e) => {
-	const [
-		minGroup,
-		minU,
+	const {
+		taskId,
+		tableMinGroup,
+		tableMinU,
 		collapseLast,
 		rows,
 		uSystem,
 		fullHedges,
 		halfHedges,
 		systemSize,
-	] = e.data;
+	} = e.data;
+	console.log('worker: table (' + taskId + ')');
 	const table = formatTable({
-		rows,
+		tableMinGroup,
+		tableMinU,
 		collapseLast,
-		minGroup,
-		minU,
+		rows,
 		uSystem,
 		fullHedges,
 		halfHedges,
 		systemSize,
 	});
-	postMessage(table);
+	postMessage({ table, taskId });
 };
 
 onerror = (e) => {
