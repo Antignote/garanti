@@ -15,6 +15,8 @@ import {
 	enterKeys,
 	toggleTableGroupLast,
 	toggleU,
+	toggleTableChanceFraction,
+	toggleTableChancePercent,
 } from './actions';
 import { systemsReducer } from './system-reducer';
 import { taskReducer } from './task-reducer';
@@ -28,6 +30,8 @@ export const DEFAULT_KEYS = '';
 const DEFAULT_TABLE_MIN_GROUP = 10;
 const DEFAULT_TABLE_MIN_U = 0;
 const DEFAULT_TABLE_COLLAPSE_LAST = true;
+const DEFAULT_TABLE_CHANCE_FRACTION = true;
+const DEFAULT_TABLE_CHANCE_PERCENT = true;
 
 const reducer = createReducer(
 	{
@@ -39,6 +43,8 @@ const reducer = createReducer(
 		tableMinGroup: DEFAULT_TABLE_MIN_GROUP,
 		tableMinU: DEFAULT_TABLE_MIN_U,
 		tableGroupLast: DEFAULT_TABLE_COLLAPSE_LAST,
+		tableChanceFraction: DEFAULT_TABLE_CHANCE_FRACTION,
+		tableChancePercent: DEFAULT_TABLE_CHANCE_PERCENT,
 	},
 	(builder) => {
 		builder
@@ -65,6 +71,12 @@ const reducer = createReducer(
 			})
 			.addCase(toggleTableGroupLast, (state) => {
 				state.tableGroupLast = !state.tableGroupLast;
+			})
+			.addCase(toggleTableChanceFraction, (state) => {
+				state.tableChanceFraction = !state.tableChanceFraction;
+			})
+			.addCase(toggleTableChancePercent, (state) => {
+				state.tableChancePercent = !state.tableChancePercent;
 			})
 			.addCase(changeSystem, (state, action) => {
 				const { name, system } = action.payload;

@@ -6,6 +6,8 @@ import {
 	selectFull,
 	selectHalf,
 	selectKeys,
+	selectTableChanceFraction,
+	selectTableChancePercent,
 	selectTableGroupLast,
 	selectTableMinGroup,
 	selectTableMinU,
@@ -66,6 +68,8 @@ const useTriggerTableWorker = (garantiRows, expoundedKeysRef) => {
 	const fullHedges = useSelector(selectFull);
 	const halfHedges = useSelector(selectHalf);
 	const uSystem = useSelector(selectU);
+	const chanceFraction = useSelector(selectTableChanceFraction);
+	const chancePercent = useSelector(selectTableChancePercent);
 
 	useEffect(() => {
 		if (currentTask === taskType.TASK_TYPE_TABLE) {
@@ -79,6 +83,8 @@ const useTriggerTableWorker = (garantiRows, expoundedKeysRef) => {
 				fullHedges,
 				halfHedges,
 				systemSize: expoundedKeysRef.current.length,
+				chanceFraction,
+				chancePercent,
 			});
 		}
 	}, [currentTask]);

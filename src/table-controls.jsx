@@ -9,6 +9,8 @@ import {
 import React, { useContext, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
+	selectTableChanceFraction,
+	selectTableChancePercent,
 	selectTableGroupLast,
 	selectTableMinGroup,
 	selectTableMinU,
@@ -16,6 +18,8 @@ import {
 import {
 	changeTableMinGroup,
 	changeTableMinU,
+	toggleTableChanceFraction,
+	toggleTableChancePercent,
 	toggleTableGroupLast,
 } from './actions.js';
 import { WorkerContext } from './workers/worker-manager.jsx';
@@ -38,6 +42,8 @@ export const TableControls = () => {
 	const minGroup = useSelector(selectTableMinGroup);
 	const minU = useSelector(selectTableMinU);
 	const groupLast = useSelector(selectTableGroupLast);
+	const chanceFraction = useSelector(selectTableChanceFraction);
+	const chancePercent = useSelector(selectTableChancePercent);
 
 	const dispatch = useDispatch();
 
@@ -53,10 +59,18 @@ export const TableControls = () => {
 		dispatch(toggleTableGroupLast());
 	};
 
+	const handleChangeTableChanceFraction = () => {
+		dispatch(toggleTableChanceFraction());
+	};
+
+	const handleChangeTableChancePercent = () => {
+		dispatch(toggleTableChancePercent());
+	};
+
 	const createTable = useContext(WorkerContext);
 	useEffect(() => {
 		createTable();
-	}, [dispatch, minGroup, minU, groupLast]);
+	}, [dispatch, minGroup, minU, groupLast, chanceFraction, chancePercent]);
 
 	return (
 		<>
@@ -108,6 +122,26 @@ export const TableControls = () => {
 							/>
 						}
 						label="Gruppera lägsta vinstgruppen"
+					/>
+					<FormControlLabel
+						control={
+							<Checkbox
+								checked={chanceFraction}
+								onChange={handleChangeTableChanceFraction}
+								color="primary"
+							/>
+						}
+						label="Chans som bråktal"
+					/>
+					<FormControlLabel
+						control={
+							<Checkbox
+								checked={chancePercent}
+								onChange={handleChangeTableChancePercent}
+								color="primary"
+							/>
+						}
+						label="Chans som procent"
 					/>
 				</Grid>
 			</Grid>

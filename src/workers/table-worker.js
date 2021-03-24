@@ -11,6 +11,8 @@ const formatTable = ({
 	fullHedges,
 	halfHedges,
 	systemSize,
+	chanceFraction,
+	chancePercent,
 }) => {
 	if (uSystem) {
 		rows = rows.filter((r) => {
@@ -177,7 +179,14 @@ const formatTable = ({
 		});
 	}
 
-	const length = MAX_CORRECTS - tableMinGroup + (uSystem ? 2 : 1);
+	let length = MAX_CORRECTS - tableMinGroup + (uSystem ? 1 : 0);
+	if (chanceFraction) {
+		length += 1;
+	}
+
+	if (chancePercent) {
+		length += 1;
+	}
 
 	const fillEmptyString = (arr) => {
 		const newArr = [...arr];
@@ -200,10 +209,13 @@ const formatTable = ({
 	for (let i = MAX_CORRECTS; i >= tableMinGroup; --i) {
 		headerData.push(i);
 	}
-	headerData.push('Chans');
+
+	if (chanceFraction || chancePercent) {
+		headerData.push('Chans');
+	}
 
 	data.push(fillEmptyString(nameData));
-	data.push(headerData);
+	data.push(fillEmptyString(headerData));
 
 	let prevUGroup = null;
 	for (const r of sorted) {
@@ -223,7 +235,17 @@ const formatTable = ({
 				}
 			}
 		}
-		itemData.push(r.occurrences + '/' + r.totalGroup);
+		if (chanceFraction) {
+			itemData.push(r.occurrences + '/' + r.totalGroup);
+		}
+		if (chancePercent) {
+			itemData.push(
+				String(+((r.occurrences / r.totalGroup) * 100).toFixed(2)).replace(
+					'.',
+					',',
+				) + '%',
+			);
+		}
 		if (uSystem && prevUGroup !== r.uCorrects && prevUGroup !== null) {
 			const dividerColumns = fillEmptyString([]);
 			data.push(dividerColumns);
@@ -234,21 +256,35 @@ const formatTable = ({
 		data.push(itemData);
 	}
 
+	const columns = {
+		0: {
+			paddingLeft: 0,
+		},
+	};
+
+	const numColumns = data[0].length;
+	columns[numColumns - 1] = {
+		paddingRight: 0,
+	};
+
+	if (chanceFraction || chancePercent) {
+		let numChanceCols = chanceFraction && chancePercent ? 2 : 1;
+		while (numChanceCols > 0) {
+			columns[numColumns - numChanceCols] = {
+				...columns[numColumns - numChanceCols],
+				alignment: 'right',
+			};
+			numChanceCols--;
+		}
+	}
+
 	return table(data, {
 		border: { ...getBorderCharacters(`void`), joinBody: `-` },
 		columnDefault: {
 			paddingLeft: 1,
 			paddingRight: 3,
 		},
-		columns: {
-			0: {
-				paddingLeft: 0,
-			},
-			[data[0].length - 1]: {
-				alignment: 'right',
-				paddingRight: 0,
-			},
-		},
+		columns,
 		drawHorizontalLine: (index) => {
 			return index === 2;
 		},
@@ -266,6 +302,8 @@ onmessage = (e) => {
 		fullHedges,
 		halfHedges,
 		systemSize,
+		chanceFraction,
+		chancePercent,
 	} = e.data;
 	console.log('worker: table (' + taskId + ')');
 	const table = formatTable({
@@ -277,6 +315,8 @@ onmessage = (e) => {
 		fullHedges,
 		halfHedges,
 		systemSize,
+		chanceFraction,
+		chancePercent,
 	});
 	postMessage({ table, taskId });
 };

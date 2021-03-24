@@ -16,6 +16,10 @@ export const selectSystems = (state) => state.systems;
 export const selectTableMinGroup = (state) => state.general.tableMinGroup;
 export const selectTableMinU = (state) => state.general.tableMinU;
 export const selectTableGroupLast = (state) => state.general.tableGroupLast;
+export const selectTableChanceFraction = (state) =>
+	state.general.tableChanceFraction;
+export const selectTableChancePercent = (state) =>
+	state.general.tableChancePercent;
 
 export const selectCurrentTask = (state) => state.task.lastTask;
 export const selectLastTaskId = (state) => state.task.lastTaskId;

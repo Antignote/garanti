@@ -11,5 +11,11 @@ export const changeTableMinU = createAction('garanti/changeTableMinU');
 export const toggleTableGroupLast = createAction(
 	'garanti/toggleTableGroupLast',
 );
+export const toggleTableChanceFraction = createAction(
+	'garanti/toggleTableChanceFraction',
+);
+export const toggleTableChancePercent = createAction(
+	'garanti/toggleTableChancePercent',
+);
 export const addTask = createAction('garanti/addTask');
 export const taskDone = createAction('garanti/taskDone');
