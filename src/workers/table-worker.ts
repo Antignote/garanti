@@ -1,4 +1,4 @@
-import { table, getBorderCharacters } from "table";
+import { getBorderCharacters, table } from "table";
 
 const MAX_CORRECTS = 13;
 
@@ -91,7 +91,6 @@ const formatTable = ({
 				} else if (a.corrects[i] < b.corrects[i]) {
 					return 1;
 				} else {
-					continue;
 				}
 			}
 		}
@@ -108,7 +107,6 @@ const formatTable = ({
 
 	const canCollapse = (a, b, fromCorrectedCorrectsIndex) => {
 		let current = fromCorrectedCorrectsIndex;
-		// eslint-disable-next-line no-constant-condition
 		while (true) {
 			if (current === MAX_CORRECTS + 1) {
 				const aU = a.uCorrects;
@@ -148,7 +146,7 @@ const formatTable = ({
 			if (prev) {
 				const lastIndex = MAX_CORRECTS - tableMinGroup;
 				for (let i = lastIndex; i > lastIndex - 1; i--) {
-					let cIndex = MAX_CORRECTS - i;
+					const cIndex = MAX_CORRECTS - i;
 					const corrects = outcome.correctedCorrects[cIndex];
 					const diff = prev.correctedCorrects[cIndex] - corrects;
 					const collapseFromIndex = cIndex + 1;
@@ -202,7 +200,7 @@ const formatTable = ({
 	const nameData = [
 		(uSystem ? "U" : "R") + fullHedges + "-" + halfHedges + "-" + systemSize,
 	];
-	let headerData = [];
+	const headerData = [];
 	if (uSystem) {
 		headerData.push("U-tips");
 	}
@@ -219,7 +217,7 @@ const formatTable = ({
 
 	let prevUGroup = null;
 	for (const r of sorted) {
-		let itemData = [];
+		const itemData = [];
 
 		if (uSystem) {
 			itemData.push(r.uCorrects);
