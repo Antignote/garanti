@@ -9,9 +9,9 @@ export const makeExpoundedKeys = (keys) => {
 	return expoundedKeys;
 };
 
-onmessage = (e) => {
+self.onmessage = (e) => {
 	const { keys, taskId } = e.data;
-	console.log("worker: expounded-keys (" + taskId + ")");
+	console.log(`worker: expounded-keys (${taskId})`);
 	const expoundedKeys = makeExpoundedKeys(keys);
 	postMessage({ taskId, expoundedKeys });
 };

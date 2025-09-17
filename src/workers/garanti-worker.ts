@@ -53,9 +53,9 @@ export const makeGaranti = ({
 	return possibleOutcomes;
 };
 
-onmessage = (e) => {
+self.onmessage = (e) => {
 	const { taskId, fullHedges, halfHedges, uSystem, expoundedKeys } = e.data;
-	console.log("worker: garanti (" + taskId + ")");
+	console.log(`worker: garanti (${taskId})`);
 	const garantiRows = makeGaranti({
 		fullHedges,
 		halfHedges,

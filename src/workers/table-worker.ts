@@ -90,10 +90,10 @@ const formatTable = ({
 					return -1;
 				} else if (a.corrects[i] < b.corrects[i]) {
 					return 1;
-				} else {
 				}
 			}
 		}
+		return 0;
 	});
 
 	const offsetFromMax = sorted[0].row.length;
@@ -198,7 +198,7 @@ const formatTable = ({
 	const data = [];
 
 	const nameData = [
-		(uSystem ? "U" : "R") + fullHedges + "-" + halfHedges + "-" + systemSize,
+		`${uSystem ? "U" : "R"}${fullHedges}-${halfHedges}-${systemSize}`,
 	];
 	const headerData = [];
 	if (uSystem) {
@@ -234,14 +234,14 @@ const formatTable = ({
 			}
 		}
 		if (chanceFraction) {
-			itemData.push(r.occurrences + "/" + r.totalGroup);
+			itemData.push(`${r.occurrences}/${r.totalGroup}`);
 		}
 		if (chancePercent) {
 			itemData.push(
-				String(+((r.occurrences / r.totalGroup) * 100).toFixed(2)).replace(
+				`${String(+((r.occurrences / r.totalGroup) * 100).toFixed(2)).replace(
 					".",
 					",",
-				) + "%",
+				)}%`,
 			);
 		}
 		if (uSystem && prevUGroup !== r.uCorrects && prevUGroup !== null) {
@@ -289,7 +289,7 @@ const formatTable = ({
 	});
 };
 
-onmessage = (e) => {
+self.onmessage = (e) => {
 	const {
 		taskId,
 		tableMinGroup,
@@ -303,7 +303,7 @@ onmessage = (e) => {
 		chanceFraction,
 		chancePercent,
 	} = e.data;
-	console.log("worker: table (" + taskId + ")");
+	console.log(`worker: table (${taskId})`);
 	const table = formatTable({
 		tableMinGroup,
 		tableMinU,
@@ -319,6 +319,6 @@ onmessage = (e) => {
 	postMessage({ table, taskId });
 };
 
-onerror = (e) => {
+self.onerror = (e) => {
 	postMessage(e);
 };

@@ -16,14 +16,14 @@ export const taskReducer = createReducer<TaskState>(
 	(builder) => {
 		builder
 			.addCase(addTask, (state, action) => {
-				const {  task } = action.payload;
+				const { task } = action.payload;
 				state.lastTask = task;
 				// state.lastTaskId = id;
 				state.data = initialData;
 				state.isWorking = true;
 			})
 			.addCase(taskDone, (state, action) => {
-				const { id, task, data } = action.payload;
+				const { task, data } = action.payload;
 				// if (state.lastTaskId > id) {
 				// 	return;
 				// }

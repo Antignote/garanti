@@ -1,4 +1,4 @@
-import { createContext, useEffect, useRef, useState } from "react";
+import { createContext, useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addTask, taskDone } from "../actions";
 import {
@@ -15,7 +15,7 @@ import {
 } from "../selectors";
 import { expoundedKeysWorker, garantiWorker, tableWorker } from "./worker";
 
-export const WorkerContext = createContext(null as any);
+export const WorkerContext = createContext<(() => void) | null>(null);
 
 const useTriggerExpoundedKeysWorker = () => {
 	const currentTask = useSelector(selectCurrentTask);
@@ -174,7 +174,7 @@ export const WorkerManager = ({ children }) => {
 
 	const dispatch = useDispatch();
 
-	const createTable = () => {
+	const createTable = useCallback(() => {
 		if (garantiRows) {
 			dispatch(
 				addTask({
@@ -183,7 +183,7 @@ export const WorkerManager = ({ children }) => {
 				}),
 			);
 		}
-	};
+	}, [garantiRows, dispatch]);
 
 	return (
 		<WorkerContext.Provider value={createTable}>

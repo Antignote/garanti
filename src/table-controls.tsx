@@ -48,7 +48,7 @@ export const TableControls = () => {
 	const createTable = useContext(WorkerContext);
 	useEffect(() => {
 		createTable();
-	}, [dispatch, minGroup, minU, groupLast, chanceFraction, chancePercent]);
+	}, [createTable]);
 
 	return (
 		<>

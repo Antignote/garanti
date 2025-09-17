@@ -2,7 +2,6 @@
 import { SystemForm } from "./system-form.tsx";
 import { Table } from "./table.tsx";
 import { TableControls } from "./table-controls.tsx";
-import { WorkerManager } from "./workers/worker-manager.tsx";
 
 const App = () => {
 	return (

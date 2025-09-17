@@ -79,9 +79,14 @@ export interface GarantiWorkerMessage {
 	uSystem: boolean;
 }
 
+export interface GarantiRow {
+	row: (string | number)[];
+	corrects: Corrects;
+}
+
 export interface GarantiWorkerResponse {
 	taskId: number;
-	garantiRows: any[]; // Type this more specifically later
+	garantiRows: GarantiRow[];
 }
 
 export interface TableWorkerMessage {
@@ -89,7 +94,7 @@ export interface TableWorkerMessage {
 	tableMinGroup: number;
 	tableMinU: number;
 	collapseLast: boolean;
-	rows: any[];
+	rows: GarantiRow[];
 	uSystem: boolean;
 	fullHedges: number;
 	halfHedges: number;
