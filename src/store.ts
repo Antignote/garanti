@@ -2,38 +2,37 @@ import {
 	combineReducers,
 	configureStore,
 	createReducer,
-	createSelector,
-	getDefaultMiddleware,
-} from '@reduxjs/toolkit';
+} from "@reduxjs/toolkit";
 import {
-	setFull,
-	setHalf,
 	changeSystem,
 	changeTableMinGroup,
 	changeTableMinU,
 	clearSystem,
 	enterKeys,
-	toggleTableGroupLast,
-	toggleU,
+	setFull,
+	setHalf,
 	toggleTableChanceFraction,
 	toggleTableChancePercent,
-} from './actions';
-import { systemsReducer } from './system-reducer';
-import { taskReducer } from './task-reducer';
-import { ZERO_TO_ONE_INDEX } from './utils';
+	toggleTableGroupLast,
+	toggleU,
+} from "./actions.js";
+import { systemsReducer } from "./system-reducer.js";
+import { taskReducer } from "./task-reducer.js";
+import type { GeneralState } from "./types.js";
+import { ZERO_TO_ONE_INDEX } from "./utils.js";
 
 export const DEFAULT_U = true;
 export const DEFAULT_FULL = 0;
 export const DEFAULT_HALF = 0;
 export const DEFAULT_SYSTEM = 0;
-export const DEFAULT_KEYS = '';
+export const DEFAULT_KEYS = "";
 const DEFAULT_TABLE_MIN_GROUP = 10;
 const DEFAULT_TABLE_MIN_U = 0;
 const DEFAULT_TABLE_COLLAPSE_LAST = true;
 const DEFAULT_TABLE_CHANCE_FRACTION = true;
 const DEFAULT_TABLE_CHANCE_PERCENT = true;
 
-const reducer = createReducer(
+const reducer = createReducer<GeneralState>(
 	{
 		full: DEFAULT_FULL,
 		half: DEFAULT_HALF,
@@ -83,16 +82,16 @@ const reducer = createReducer(
 				state.system = name;
 				state.full = system.numFullHedges;
 				state.half = system.numHalfHedges;
-				state.u = system.systemType === 'U';
+				state.u = system.systemType === "U";
 				state.keys = system.rows
 					.map((row) => {
 						return row
 							.map((sign) => {
 								return ZERO_TO_ONE_INDEX[sign];
 							})
-							.join('');
+							.join("");
 					})
-					.join('\n');
+					.join("\n");
 			})
 			.addCase(clearSystem, (state) => {
 				state.system = DEFAULT_SYSTEM;
@@ -112,7 +111,7 @@ const rootReducer = combineReducers({
 
 export const store = configureStore({
 	reducer: rootReducer,
-	middleware: getDefaultMiddleware({
+	middleware: (getDefaultMiddleware) => getDefaultMiddleware({
 		immutableCheck: false,
 		serializableCheck: false,
 	}),

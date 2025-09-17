@@ -2,7 +2,7 @@ import {
 	calculateCorrectsForRowInSystem,
 	getExpandedRowsFromSingleRow,
 	splitToRows,
-} from '../utils';
+} from "../utils";
 
 export const makeGaranti = ({
 	fullHedges,
@@ -55,7 +55,7 @@ export const makeGaranti = ({
 
 onmessage = (e) => {
 	const { taskId, fullHedges, halfHedges, uSystem, expoundedKeys } = e.data;
-	console.log('worker: garanti (' + taskId + ')');
+	console.log("worker: garanti (" + taskId + ")");
 	const garantiRows = makeGaranti({
 		fullHedges,
 		halfHedges,

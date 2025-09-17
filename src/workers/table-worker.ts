@@ -1,4 +1,4 @@
-import { table, getBorderCharacters } from 'table';
+import { table, getBorderCharacters } from "table";
 
 const MAX_CORRECTS = 13;
 
@@ -23,11 +23,11 @@ const formatTable = ({
 	rows.forEach((outcome) => {
 		outcome.correctsAsString =
 			outcome.uCorrects +
-			';' +
+			";" +
 			Object.entries(outcome.corrects)
-				.flatMap((x) => x.join(':'))
+				.flatMap((x) => x.join(":"))
 				.slice(-(MAX_CORRECTS - tableMinGroup + 1))
-				.join(';');
+				.join(";");
 	});
 
 	const occurrences = new Map();
@@ -191,7 +191,7 @@ const formatTable = ({
 	const fillEmptyString = (arr) => {
 		const newArr = [...arr];
 		while (newArr.length <= length) {
-			newArr.push('');
+			newArr.push("");
 		}
 
 		return newArr;
@@ -200,18 +200,18 @@ const formatTable = ({
 	const data = [];
 
 	const nameData = [
-		(uSystem ? 'U' : 'R') + fullHedges + '-' + halfHedges + '-' + systemSize,
+		(uSystem ? "U" : "R") + fullHedges + "-" + halfHedges + "-" + systemSize,
 	];
 	let headerData = [];
 	if (uSystem) {
-		headerData.push('U-tips');
+		headerData.push("U-tips");
 	}
 	for (let i = MAX_CORRECTS; i >= tableMinGroup; --i) {
 		headerData.push(i);
 	}
 
 	if (chanceFraction || chancePercent) {
-		headerData.push('Chans');
+		headerData.push("Chans");
 	}
 
 	data.push(fillEmptyString(nameData));
@@ -226,24 +226,24 @@ const formatTable = ({
 		}
 		for (let i = MAX_CORRECTS; i >= tableMinGroup; --i) {
 			if (r.correctedCorrects[i] === 0) {
-				itemData.push('-');
+				itemData.push("-");
 			} else {
 				if (Array.isArray(r.correctedCorrects[i])) {
-					itemData.push(r.correctedCorrects[i].reverse().join('-'));
+					itemData.push(r.correctedCorrects[i].reverse().join("-"));
 				} else {
 					itemData.push(r.correctedCorrects[i]);
 				}
 			}
 		}
 		if (chanceFraction) {
-			itemData.push(r.occurrences + '/' + r.totalGroup);
+			itemData.push(r.occurrences + "/" + r.totalGroup);
 		}
 		if (chancePercent) {
 			itemData.push(
 				String(+((r.occurrences / r.totalGroup) * 100).toFixed(2)).replace(
-					'.',
-					',',
-				) + '%',
+					".",
+					",",
+				) + "%",
 			);
 		}
 		if (uSystem && prevUGroup !== r.uCorrects && prevUGroup !== null) {
@@ -272,7 +272,7 @@ const formatTable = ({
 		while (numChanceCols > 0) {
 			columns[numColumns - numChanceCols] = {
 				...columns[numColumns - numChanceCols],
-				alignment: 'right',
+				alignment: "right",
 			};
 			numChanceCols--;
 		}
@@ -305,7 +305,7 @@ onmessage = (e) => {
 		chanceFraction,
 		chancePercent,
 	} = e.data;
-	console.log('worker: table (' + taskId + ')');
+	console.log("worker: table (" + taskId + ")");
 	const table = formatTable({
 		tableMinGroup,
 		tableMinU,

@@ -1,69 +1,30 @@
 {
-  "scripts": {
-    "start": "snowpack dev",
-    "build": "snowpack build",
-    "test": "web-test-runner \"src/**/*.test.jsx\"",
-    "format": "prettier --write \"src/**/*.{js,jsx}\"",
-    "lint": "prettier --check \"src/**/*.{js,jsx}\""
-  },
-  "dependencies": {
-    "@material-ui/core": "^4.11.3",
-    "@material-ui/icons": "^4.11.2",
-    "@material-ui/lab": "^4.0.0-alpha.57",
-    "@reduxjs/toolkit": "^1.5.0",
-    "react": "^17.0.1",
-    "react-dom": "^17.0.1",
-    "react-redux": "^7.2.2",
-    "table": "^6.0.7"
-  },
-  "devDependencies": {
-    "@snowpack/plugin-dotenv": "^2.0.5",
-    "@snowpack/plugin-react-refresh": "^2.4.0",
-    "@snowpack/web-test-runner-plugin": "^0.2.1",
-    "@testing-library/react": "^11.2.5",
-    "@web/test-runner": "^0.12.15",
-    "chai": "^4.3.3",
-    "eslint": "^7.21.0",
-    "eslint-config-prettier": "^8.1.0",
-    "eslint-plugin-import": "^2.22.1",
-    "eslint-plugin-prettier": "^3.3.1",
-    "eslint-plugin-react": "^7.22.0",
-    "prettier": "^2.2.1",
-    "snowpack": "^3.0.13"
-  },
-  "eslintIgnore": [
-    "build",
-    "public",
-    "src/systems.js"
-  ],
-  "eslintConfig": {
-    "settings": {
-      "react": {
-        "version": "detect"
-      }
-    },
-    "env": {
-      "browser": true,
-      "node": true,
-      "es2021": true,
-      "commonjs": true
-    },
-    "extends": [
-      "eslint:recommended",
-      "plugin:react/recommended",
-			"plugin:import/errors",
-			"plugin:import/warnings",
-      "plugin:prettier/recommended"
-    ],
-    "parserOptions": {
-      "ecmaFeatures": {
-        "jsx": true
-      },
-      "ecmaVersion": 12,
-      "sourceType": "module"
-    },
-    "plugins": [
-      "react"
-    ]
-  }
+	"name": "garanti",
+	"private": true,
+	"version": "0.0.0",
+	"type": "module",
+	"scripts": {
+		"dev": "vite",
+		"build": "tsc -b && vite build",
+		"lint": "eslint .",
+		"preview": "vite preview"
+	},
+	"dependencies": {
+		"@reduxjs/toolkit": "^2.9.0",
+		"react": "^19.1.1",
+		"react-dom": "^19.1.1",
+		"react-redux": "^9.2.0",
+		"table": "^6.9.0"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "2.2.4",
+		"@tailwindcss/vite": "^4.1.13",
+		"@types/react": "^19.1.13",
+		"@types/react-dom": "^19.1.9",
+		"@vitejs/plugin-react": "^5.0.3",
+		"tailwindcss": "^4.1.13",
+		"typescript": "~5.9.2",
+		"vite": "^7.1.5"
+	},
+	"packageManager": "pnpm@10.15.0+sha512.486ebc259d3e999a4e8691ce03b5cac4a71cbeca39372a9b762cb500cfdf0873e2cb16abe3d951b1ee2cf012503f027b98b6584e4df22524e0c7450d9ec7aa7b"
 }

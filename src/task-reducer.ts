@@ -1,24 +1,22 @@
-import { createReducer } from '@reduxjs/toolkit';
-import { addTask, taskDone } from './actions';
-import { taskType } from './task-type';
+import { createReducer } from "@reduxjs/toolkit";
+import { addTask, taskDone } from "./actions.js";
+import type { TaskData, TaskState } from "./types.js";
 
-const initialData = {
-	expoundedKeys: [],
-	rows: [],
-	table: '',
+const initialData: TaskData = {
+	table: "",
 };
 
-export const taskReducer = createReducer(
+export const taskReducer = createReducer<TaskState>(
 	{
 		lastTask: null,
 		isWorking: false,
-		// lastTaskId: Number.NEGATIVE_INFINITY,
+		lastTaskId: null,
 		data: { ...initialData },
 	},
 	(builder) => {
 		builder
 			.addCase(addTask, (state, action) => {
-				const { id, task } = action.payload;
+				const {  task } = action.payload;
 				state.lastTask = task;
 				// state.lastTaskId = id;
 				state.data = initialData;
@@ -33,11 +31,11 @@ export const taskReducer = createReducer(
 				let nextTask = state.lastTask;
 				let nextIsWorking = state.isWorking;
 
-				if (task === taskType.TASK_TYPE_EXPOUNDED_KEYS) {
-					nextTask = taskType.TASK_TYPE_GARANTI_ROWS;
-				} else if (task === taskType.TASK_TYPE_GARANTI_ROWS) {
-					nextTask = taskType.TASK_TYPE_TABLE;
-				} else if (task === taskType.TASK_TYPE_TABLE) {
+				if (task === "expoundedKeys") {
+					nextTask = "garantiRows";
+				} else if (task === "garantiRows") {
+					nextTask = "table";
+				} else if (task === "table") {
 					nextTask = null;
 					nextIsWorking = false;
 				}

@@ -1,6 +1,6 @@
-import React, { createContext, useEffect, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { addTask, taskDone } from '../actions';
+import { createContext, useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { addTask, taskDone } from "../actions";
 import {
 	selectCurrentTask,
 	selectFull,
@@ -12,26 +12,24 @@ import {
 	selectTableMinGroup,
 	selectTableMinU,
 	selectU,
-} from '../selectors';
-import { taskType } from '../task-type';
-import { expoundedKeysWorker, garantiWorker, tableWorker } from './worker';
-import PropTypes from 'prop-types';
+} from "../selectors";
+import { expoundedKeysWorker, garantiWorker, tableWorker } from "./worker";
 
-export const WorkerContext = createContext();
+export const WorkerContext = createContext(null as any);
 
 const useTriggerExpoundedKeysWorker = () => {
 	const currentTask = useSelector(selectCurrentTask);
 	const keys = useSelector(selectKeys);
 	useEffect(() => {
-		if (currentTask === taskType.TASK_TYPE_EXPOUNDED_KEYS) {
+		if (currentTask === "expoundedKeys") {
 			const trimmedKeys = keys
 				.trim()
-				.split('\n')
+				.split("\n")
 				.map((line) => line.trim())
 				.filter((line) => {
 					return line.length > 0;
 				})
-				.map((line) => line.split('').map((x) => Number(x)));
+				.map((line) => line.split("").map((x) => Number(x)));
 			expoundedKeysWorker.postMessage({
 				taskId: performance.now(),
 				keys: trimmedKeys,
@@ -48,7 +46,7 @@ const useTriggerGarantiWorker = (expoundedKeysRef) => {
 	const keys = useSelector(selectKeys);
 
 	useEffect(() => {
-		if (currentTask === taskType.TASK_TYPE_GARANTI_ROWS) {
+		if (currentTask === "garantiRows") {
 			garantiWorker.postMessage({
 				taskId: performance.now(),
 				fullHedges,
@@ -72,7 +70,7 @@ const useTriggerTableWorker = (garantiRows, expoundedKeysRef) => {
 	const chancePercent = useSelector(selectTableChancePercent);
 
 	useEffect(() => {
-		if (currentTask === taskType.TASK_TYPE_TABLE) {
+		if (currentTask === "table") {
 			tableWorker.postMessage({
 				taskId: performance.now(),
 				tableMinGroup,
@@ -100,16 +98,16 @@ const useExpoundedKeysResult = (expoundedKeysRef) => {
 				dispatch(
 					taskDone({
 						id: taskId,
-						task: taskType.TASK_TYPE_EXPOUNDED_KEYS,
+						task: "expoundedKeys",
 					}),
 				);
 			}
 		};
 
-		expoundedKeysWorker.addEventListener('message', onMessage);
+		expoundedKeysWorker.addEventListener("message", onMessage);
 
 		return () => {
-			expoundedKeysWorker.removeEventListener('message', onMessage);
+			expoundedKeysWorker.removeEventListener("message", onMessage);
 		};
 	}, []);
 };
@@ -124,15 +122,15 @@ const useGarantiRowsResult = (setGarantiRows) => {
 				dispatch(
 					taskDone({
 						id: taskId,
-						task: taskType.TASK_TYPE_GARANTI_ROWS,
+						task: "garantiRows",
 					}),
 				);
 			}
 		};
 
-		garantiWorker.addEventListener('message', onMessage);
+		garantiWorker.addEventListener("message", onMessage);
 		return () => {
-			garantiWorker.removeEventListener('message', onMessage);
+			garantiWorker.removeEventListener("message", onMessage);
 		};
 	}, []);
 };
@@ -146,16 +144,16 @@ const useTableResult = () => {
 				dispatch(
 					taskDone({
 						id: taskId,
-						task: taskType.TASK_TYPE_TABLE,
+						task: "table",
 						data: { table },
 					}),
 				);
 			}
 		};
 
-		tableWorker.addEventListener('message', onMessage);
+		tableWorker.addEventListener("message", onMessage);
 		return () => {
-			tableWorker.removeEventListener('message', onMessage);
+			tableWorker.removeEventListener("message", onMessage);
 		};
 	}, []);
 };
@@ -180,7 +178,7 @@ export const WorkerManager = ({ children }) => {
 		if (garantiRows) {
 			dispatch(
 				addTask({
-					task: taskType.TASK_TYPE_TABLE,
+					task: "table",
 					id: performance.now(),
 				}),
 			);
@@ -192,8 +190,4 @@ export const WorkerManager = ({ children }) => {
 			{children}
 		</WorkerContext.Provider>
 	);
-};
-
-WorkerManager.propTypes = {
-	children: PropTypes.node,
 };

@@ -1,21 +1,36 @@
-const NUM_TO_HEDGE_SIGNS = {
+import type {
+	Corrects,
+	HalfHedgeUOutcomes,
+	HedgeSigns,
+	IndexMapping,
+	Mark,
+	Num1X2,
+	RowData,
+	UOutcomes,
+} from "./types.js";
+
+const NUM_TO_HEDGE_SIGNS: HedgeSigns = {
 	7: [1, 2, 3],
 	6: [2, 3],
 	5: [1, 3],
 	4: [1, 2],
 };
 
-const NUM_TO_1X2 = {
-	1: '1',
-	2: 'X',
-	3: '2',
-	4: '1X',
-	5: '12',
-	6: 'X2',
-	7: '1X2',
+const NUM_TO_1X2: Num1X2 = {
+	1: "1",
+	2: "X",
+	3: "2",
+	4: "1X",
+	5: "12",
+	6: "X2",
+	7: "1X2",
 };
 
-const getMathRows = (row, currentMark, marks) => {
+const getMathRows = (
+	row: number[],
+	currentMark: number,
+	marks: Mark[],
+): number[][] => {
 	if (marks.length === currentMark) {
 		return [];
 	}
@@ -34,9 +49,9 @@ const getMathRows = (row, currentMark, marks) => {
 	return combinedRows;
 };
 
-export const splitToRows = (row) => {
-	const marks = [];
-	let rows = [];
+export const splitToRows = (row: number[]): number[][] => {
+	const marks: Mark[] = [];
+	let rows: number[][] = [];
 
 	for (let i = 0; i < row.length; ++i) {
 		if (row[i] > 3) {
@@ -56,12 +71,12 @@ export const splitToRows = (row) => {
 	return rows;
 };
 
-const U_OUTCOMES = {
+const U_OUTCOMES: UOutcomes = {
 	1: { 1: 1, 2: 2, 3: 3 },
 	2: { 1: 2, 2: 1, 3: 3 },
 	3: { 1: 3, 2: 1, 3: 2 },
 };
-const HALF_HEDGE_U_OUTCOMES = {
+const HALF_HEDGE_U_OUTCOMES: HalfHedgeUOutcomes = {
 	1: {
 		4: { 1: 1, 2: 2 },
 		5: { 1: 1, 3: 3 },
@@ -76,7 +91,11 @@ const HALF_HEDGE_U_OUTCOMES = {
 	},
 };
 
-export const getExpandedRowsFromSingleRow = (system, row, uRows) => {
+export const getExpandedRowsFromSingleRow = (
+	system: number[][],
+	row: number[],
+	uRows?: number[],
+): (string | number)[][] => {
 	const fullIndices = [];
 	const halfIndices = [];
 	const singlesIndices = [];
@@ -100,7 +119,7 @@ export const getExpandedRowsFromSingleRow = (system, row, uRows) => {
 		for (const fullIndex of fullIndices) {
 			const keyIndex = ++currentFullIndex;
 			if (isUSystem) {
-				const uSign = uRows[fullIndex];
+				const uSign = uRows![fullIndex];
 				eRow.push(U_OUTCOMES[uSign][key[keyIndex]]);
 			} else {
 				eRow.push(key[keyIndex]);
@@ -111,7 +130,7 @@ export const getExpandedRowsFromSingleRow = (system, row, uRows) => {
 		for (const halfIndex of halfIndices) {
 			const keyIndex = ++currentHalfIndex;
 			if (isUSystem) {
-				const uSign = uRows[halfIndex];
+				const uSign = uRows![halfIndex];
 				eRow.push(HALF_HEDGE_U_OUTCOMES[uSign][row[halfIndex]][key[keyIndex]]);
 			} else {
 				eRow.push(key[keyIndex]);
@@ -127,11 +146,15 @@ export const getExpandedRowsFromSingleRow = (system, row, uRows) => {
 	return expandedRows;
 };
 
-export const getExpandedRows = (system, row, uRows) => {
-	const marks = [];
+export const getExpandedRows = (
+	system: number[][],
+	row: number[],
+	uRows?: number[],
+): (string | number)[][] => {
+	const marks: Mark[] = [];
 	const currentRow = row;
-	let rowsToProcess = [];
-	const processedRows = [];
+	let rowsToProcess: number[][] = [];
+	const processedRows: (string | number)[][] = [];
 
 	for (let i = 0; i < currentRow.length; i++) {
 		if (currentRow[i] > 3) {
@@ -155,8 +178,11 @@ export const getExpandedRows = (system, row, uRows) => {
 	return processedRows;
 };
 
-export const calculateCorrectsForRowInSystem = (row, systemRows) => {
-	const corrects = {};
+export const calculateCorrectsForRowInSystem = (
+	row: RowData,
+	systemRows: (string | number)[][],
+): Corrects => {
+	const corrects: Corrects = {};
 
 	for (const reducedRow of systemRows) {
 		let correctForReducedRow = 0;
@@ -172,22 +198,22 @@ export const calculateCorrectsForRowInSystem = (row, systemRows) => {
 	return corrects;
 };
 
-export const ZERO_TO_ONE_INDEX = {
-	0: '1',
-	1: '2',
-	2: '3',
-	3: '4',
-	4: '5',
-	5: '6',
-	6: '7',
+export const ZERO_TO_ONE_INDEX: IndexMapping = {
+	0: "1",
+	1: "2",
+	2: "3",
+	3: "4",
+	4: "5",
+	5: "6",
+	6: "7",
 };
 
-export const ONE_TO_ZERO_INDEX = {
-	1: '0',
-	2: '1',
-	3: '2',
-	4: '3',
-	5: '4',
-	6: '5',
-	7: '6',
+export const ONE_TO_ZERO_INDEX: IndexMapping = {
+	1: "0",
+	2: "1",
+	3: "2",
+	4: "3",
+	5: "4",
+	6: "5",
+	7: "6",
 };
