@@ -1,3 +1,4 @@
+// @ts-expect-error This import is ok
 import "./index.css";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";

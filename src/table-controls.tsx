@@ -1,4 +1,6 @@
-import  { useContext, useEffect } from "react";
+import { useContext, useEffect } from "react";
+import type { ChangeEvent } from "react";
+import type { RootState } from "./types";
 import { useDispatch, useSelector } from "react-redux";
 import {
 	changeTableMinGroup,
@@ -16,39 +18,42 @@ import {
 } from "./selectors.js";
 import { WorkerContext } from "./workers/worker-manager.jsx";
 
+
 export const TableControls = () => {
-	const minGroup = useSelector(selectTableMinGroup);
-	const minU = useSelector(selectTableMinU);
-	const groupLast = useSelector(selectTableGroupLast);
-	const chanceFraction = useSelector(selectTableChanceFraction);
-	const chancePercent = useSelector(selectTableChancePercent);
+       const minGroup = useSelector((state: RootState) => selectTableMinGroup(state));
+       const minU = useSelector((state: RootState) => selectTableMinU(state));
+       const groupLast = useSelector((state: RootState) => selectTableGroupLast(state));
+       const chanceFraction = useSelector((state: RootState) => selectTableChanceFraction(state));
+       const chancePercent = useSelector((state: RootState) => selectTableChancePercent(state));
 
-	const dispatch = useDispatch();
+       const dispatch = useDispatch();
 
-	const handleChangeTableMinGroup = (event) => {
-		dispatch(changeTableMinGroup(Number(event.target.value)));
-	};
+       const handleChangeTableMinGroup = (event: ChangeEvent<HTMLSelectElement>): void => {
+	       dispatch(changeTableMinGroup(Number(event.target.value)));
+       };
 
-	const handleChangeTableMinU = (event) => {
-		dispatch(changeTableMinU(Number(event.target.value)));
-	};
+       const handleChangeTableMinU = (event: ChangeEvent<HTMLSelectElement>): void => {
+	       dispatch(changeTableMinU(Number(event.target.value)));
+       };
 
-	const handleChangeTableCollapseLast = () => {
-		dispatch(toggleTableGroupLast());
-	};
+       const handleChangeTableCollapseLast = (): void => {
+	       dispatch(toggleTableGroupLast());
+       };
 
-	const handleChangeTableChanceFraction = () => {
-		dispatch(toggleTableChanceFraction());
-	};
+       const handleChangeTableChanceFraction = (): void => {
+	       dispatch(toggleTableChanceFraction());
+       };
 
-	const handleChangeTableChancePercent = () => {
-		dispatch(toggleTableChancePercent());
-	};
+       const handleChangeTableChancePercent = (): void => {
+	       dispatch(toggleTableChancePercent());
+       };
 
-	const createTable = useContext(WorkerContext);
-	useEffect(() => {
-		createTable();
-	}, [createTable]);
+       const createTable = useContext(WorkerContext);
+       useEffect(() => {
+	       if (typeof createTable === "function") {
+		       createTable();
+	       }
+       }, [createTable]);
 
 	return (
 		<>

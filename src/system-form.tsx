@@ -1,4 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
+import type { ChangeEvent, FormEvent } from "react";
+import type { RootState, Systems } from "./types";
 import {
 	addTask,
 	changeSystem,
@@ -18,7 +20,7 @@ import {
 	selectU,
 } from "./selectors.ts";
 
-const hedges = [...Array(14).keys()];
+const hedges: number[] = [...Array(14).keys()];
 
 // Copy icon as SVG component
 const FileCopyIcon = () => (
@@ -29,72 +31,73 @@ const FileCopyIcon = () => (
 	</svg>
 );
 
+
 export const SystemForm = () => {
-	const dispatch = useDispatch();
+       const dispatch = useDispatch();
 
-	const full = useSelector(selectFull);
-	const half = useSelector(selectHalf);
-	const u = useSelector(selectU);
-	const keys = useSelector(selectKeys);
-	const system = useSelector(selectSystem);
+       const full = useSelector((state: RootState) => selectFull(state));
+       const half = useSelector((state: RootState) => selectHalf(state));
+       const u = useSelector((state: RootState) => selectU(state));
+       const keys = useSelector((state: RootState) => selectKeys(state));
+       const system = useSelector((state: RootState) => selectSystem(state));
 
-	const handleChangeU = () => {
-		dispatch(toggleU());
-	};
+       const handleChangeU = (): void => {
+	       dispatch(toggleU());
+       };
 
-	const handleChangeFull = (event) => {
-		dispatch(setFull(Number(event.target.value)));
-	};
+       const handleChangeFull = (event: ChangeEvent<HTMLSelectElement>): void => {
+	       dispatch(setFull(Number(event.target.value)));
+       };
 
-	const handleChangeHalf = (event) => {
-		dispatch(setHalf(Number(event.target.value)));
-	};
+       const handleChangeHalf = (event: ChangeEvent<HTMLSelectElement>): void => {
+	       dispatch(setHalf(Number(event.target.value)));
+       };
 
-	const handleChangeKeys = (event) => {
-		dispatch(enterKeys(event.target.value));
-	};
+       const handleChangeKeys = (event: ChangeEvent<HTMLTextAreaElement>): void => {
+	       dispatch(enterKeys(event.target.value));
+       };
 
-	const handleCalculate = (e) => {
-		e.preventDefault();
-		dispatch(
-			addTask({
-				task: "expoundedKeys",
-				id: performance.now(),
-			}),
-		);
-	};
+       const handleCalculate = (e: FormEvent<HTMLFormElement>): void => {
+	       e.preventDefault();
+	       dispatch(
+		       addTask({
+			       task: "expoundedKeys",
+			       id: performance.now(),
+		       }),
+	       );
+       };
 
-	const handleResetForm = () => {
-		dispatch(clearSystem());
-	};
+       const handleResetForm = (): void => {
+	       dispatch(clearSystem());
+       };
 
-	const systems = useSelector(selectSystems);
+       const systems = useSelector((state: RootState) => selectSystems(state)) as Systems;
 
-	const handleChangeRUSystem = (event) => {
-		const name = event.target.value;
-		dispatch(
-			changeSystem({
-				name,
-				system: systems[name],
-			}),
-		);
-	};
+       const handleChangeRUSystem = (event: ChangeEvent<HTMLSelectElement>): void => {
+	       const name = event.target.value;
+	       dispatch(
+		       changeSystem({
+			       name,
+			       system: systems[name],
+		       }),
+	       );
+       };
 
-	const handleCopyKeys = async () => {
-		navigator.permissions.query({ name: "clipboard-write" }).then((result) => {
-			if (result.state === "granted" || result.state === "prompt") {
-				navigator.clipboard.writeText(keys).then(
-					() => {},
-					() => {
-						alert("Kopieringen misslyckades");
-					},
-				);
-			}
-		});
-	};
+       const handleCopyKeys = async (): Promise<void> => {
+	       navigator.permissions.query({ name: "clipboard-write" as PermissionName }).then((result) => {
+		       if (result.state === "granted" || result.state === "prompt") {
+			       navigator.clipboard.writeText(keys).then(
+				       () => {},
+				       () => {
+					       alert("Kopieringen misslyckades");
+				       },
+			       );
+		       }
+	       });
+       };
 
-	const disableSubmit = keys.trim().length === 0;
-	const disableReset = useSelector(selectDisabledSubmit);
+       const disableSubmit = keys.trim().length === 0;
+       const disableReset = useSelector((state: RootState) => selectDisabledSubmit(state));
 
 	return (
 		<form onSubmit={handleCalculate} onReset={handleResetForm}>
